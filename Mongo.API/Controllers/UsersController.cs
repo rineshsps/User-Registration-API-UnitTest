@@ -31,7 +31,6 @@ namespace Mongo.API.Controllers
             this._jWTService = jWTService;
         }
 
-
         [Authorize]
         [HttpGet("GetUser")]
         public IActionResult GetUser()
@@ -66,7 +65,7 @@ namespace Mongo.API.Controllers
                 if (ModelState.IsValid)
                 {
                     var model = _mapper.Map<User>(user);
-                    var display = _userServices.Create(model);
+                    var result = _userServices.Create(model);
                     return StatusCode(201);
                 }
                 else
@@ -80,7 +79,6 @@ namespace Mongo.API.Controllers
                 return StatusCode(500);
             }
         }
-
 
         [HttpPost("Authenticate")]
         public IActionResult Authenticate(AuthenticateDTO authenticate)

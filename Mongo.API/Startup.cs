@@ -29,21 +29,14 @@ namespace Mongo.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowAllOrigins",
-            //        builder => builder.AllowAnyOrigin());
-            //});
-
             services.AddControllers();
-
-            //services.AddHttpClient();
             services.AddCors();
 
             services.AddSingleton<IUsersContext, UsersContext>();
             services.Configure<ApplicationSettings>(Configuration);
             services.AddTransient<IUserServices, UserServices>();
             services.AddTransient<IJWTServices, JWTServices>();
+            services.AddTransient<IEmailServices, EmailServices>();
             services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(c =>
             {
@@ -81,6 +74,7 @@ namespace Mongo.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //Enable swagger api
             // if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -88,10 +82,6 @@ namespace Mongo.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mongo.API v1"));
             }
 
-            //app.UseCors();
-
-
-            //  app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

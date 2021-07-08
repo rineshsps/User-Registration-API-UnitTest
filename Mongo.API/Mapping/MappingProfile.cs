@@ -9,7 +9,6 @@ namespace Mongo.API.Mapping
         public MappingProfile()
         {
             CreateMap<UserCreateDTO, User>();
-            CreateMap<UserUpdateDTO, User>();
             CreateMap<User, UserDisplayDTO>();
         }
     }

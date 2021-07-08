@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace Mongo.Database.Models
 {
@@ -10,5 +11,7 @@ namespace Mongo.Database.Models
         public string FullName { get; set; }
         public string UserName { get; set; }//Email
         public string Password { get; set; }
+        public bool Active { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

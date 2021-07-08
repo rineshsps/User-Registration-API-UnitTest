@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,8 +24,11 @@ namespace Mongo.API.Attribute
 
     public class AuthenticationFilter : IAuthorizationFilter
     {
-        public AuthenticationFilter(AuthenticationParams[] authParams)
+        private readonly IConfiguration configuration;
+
+        public AuthenticationFilter(AuthenticationParams[] authParams, IConfiguration configuration)
         {
+            this.configuration = configuration;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -65,13 +69,16 @@ namespace Mongo.API.Attribute
             {
                 try
                 {
-                    string rawToken = jwtToken.Trim();
+                    var jwtSettings = configuration.GetSection("AppSettings");
+                    var key = Encoding.ASCII.GetBytes(jwtSettings["JWtSecret"]);
 
+                    string rawToken = jwtToken.Trim();
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                     JwtSecurityToken token = (JwtSecurityToken)tokenHandler.ReadToken(rawToken);
 
                     SecurityToken validatedToken;
-                    var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("passkeywordsdfgdsfgfdsg"));
+                    
+                    var signingKey = new SymmetricSecurityKey(key);
                     var tokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,

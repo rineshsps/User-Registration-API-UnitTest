@@ -6,11 +6,8 @@ namespace Mongo.Services.Interfaces
 {
     public interface IUserServices
     {
-        List<User> GetUsers();
         User GetUser(string id);
         User Create(User book);
-        User Update(User book);
-        void Delete(string id);
         User Authenticate(AuthenticateDTO authenticate);
     }
 }

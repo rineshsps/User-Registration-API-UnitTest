@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mongo.DTOs
 {
-    public class UserCreateDTO
+    public class UserCreateDTO 
     {
         [Required]
         [MinLength(3)]
