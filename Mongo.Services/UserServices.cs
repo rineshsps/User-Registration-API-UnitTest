@@ -61,7 +61,12 @@ namespace Mongo.Services
         /// <returns></returns>
         public User Authenticate(AuthenticateDTO authenticate)
         {
-            var user = _users.Find(user => user.UserName == authenticate.UserName).Single();
+            var user = _users.Find(user => user.UserName == authenticate.UserName).FirstOrDefault();
+
+            if (user ==null)
+            {
+                throw new Exception("User not found");
+            }
 
             // check account found and verify password
             var isValid = BCrypt.Net.BCrypt.Verify(authenticate.Password, user.Password);

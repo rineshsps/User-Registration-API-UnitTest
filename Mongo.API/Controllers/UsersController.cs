@@ -35,8 +35,8 @@ namespace Mongo.API.Controllers
         [HttpGet("GetUser")]
         public IActionResult GetUser()
         {
-            try
-            {
+            //try
+           // {
                 var userid = User.FindFirst("UserName").Value;
                 var user = _userServices.GetUser(userid);
 
@@ -48,20 +48,23 @@ namespace Mongo.API.Controllers
                     return NotFound();
                 }
                 return Ok(model);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Exception get books api/GetUser");
+           // }
+            //catch (Exception ex)
+            //{
 
-                return StatusCode(500);
-            }
+            //    _logger.LogError(ex, $"Exception get books api/GetUser");
+            //   // await HandleExceptionAsync(httpContext, avEx);
+
+
+            //    return StatusCode(500);
+            //}
         }
 
         [HttpPost]
         public IActionResult PostUsers(UserCreateDTO user)
         {
-            try
-            {
+           // try
+            //{
                 if (ModelState.IsValid)
                 {
                     var model = _mapper.Map<User>(user);
@@ -72,12 +75,12 @@ namespace Mongo.API.Controllers
                 {
                     return BadRequest(ModelState.Values);
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Add User api/User");
-                return StatusCode(500);
-            }
+           // }
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex, $"Add User api/User");
+            //    return StatusCode(500);
+            //}
         }
 
         [HttpPost("Authenticate")]
@@ -104,7 +107,7 @@ namespace Mongo.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Exeption Authenticate book api/Authenticate");
-                return StatusCode(500);
+                return StatusCode(501);
             }
         }
     }

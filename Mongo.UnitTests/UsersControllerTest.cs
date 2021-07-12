@@ -16,6 +16,7 @@ using Mongo.Settings;
 using MongoDB.Driver;
 using Moq;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,7 +33,8 @@ namespace Mongo.UnitTests
         }
         public static IFixture GetDefaultFixture()
         {
-            var autoMoqCustomization = new AutoMoqCustomization() { ConfigureMembers=true};
+            //var autoMoqCustomization = new AutoMoqCustomization() { ConfigureMembers=true};
+            var autoMoqCustomization = new AutoMoqCustomization();
 
             return new Fixture().Customize(autoMoqCustomization);
         }
@@ -57,20 +59,17 @@ namespace Mongo.UnitTests
         }
 
         [Theory, GenerateDefaultTestData]
-        public void CreateUser_Failed_Vaidation_Test(User user, IUsersContext db, IEmailServices email, IUserServices _userServices, ILogger<UsersController> logger, IMapper mapper, IJWTServices jWTService)
+        public void CreateUser_Failed_Vaidation_Test(UserCreateDTO user, IUsersContext db, IEmailServices email, IUserServices _userServices, ILogger<UsersController> logger, IMapper mapper, IJWTServices jWTService)
         {
             var usersController = new UsersController(_userServices, logger, mapper, jWTService);
-
-            var userDTO = new UserCreateDTO
-            {
-                Password = "password123",
-                UserName = "user@mail.com"
-            };
-
             usersController.ModelState.AddModelError("FullName", "Name is requied filed, Model error");
-            var result = usersController.PostUsers(userDTO);
-            var okObject = result as StatusCodeResult;
-            Assert.Null(okObject);
+            var result = usersController.PostUsers(user);
+            // Assert
+
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.NotNull(badRequestResult.Value);
+            Assert.True(badRequestResult.StatusCode == (int)HttpStatusCode.BadRequest);
+
         }
 
 

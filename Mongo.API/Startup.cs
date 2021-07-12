@@ -14,14 +14,20 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using Mongo.API.Middleware;
 
 namespace Mongo.API
 {
+    
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+
         }
 
         public IConfiguration Configuration { get; }
@@ -74,6 +80,7 @@ namespace Mongo.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             //Enable swagger api
             // if (env.IsDevelopment())
             {
@@ -81,6 +88,11 @@ namespace Mongo.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mongo.API v1"));
             }
+
+            //app.Run(ExceptionMiddleware);
+            //app.UseMiddleware<ExceptionMiddleware>();
+            app.ConfigureCustomExceptionMiddleware();
+
 
             app.UseRouting();
             app.UseAuthentication();
@@ -99,5 +111,13 @@ namespace Mongo.API
                 endpoints.MapControllers();
             });
         }
+
+        // Configu exception middle ware 
+        //private Task ExceptionMiddleware(HttpContext context)
+        //{
+        //    return context.Response.WriteAsync("Hello World! + Exception ");
+        //}
+
+        
     }
 }
