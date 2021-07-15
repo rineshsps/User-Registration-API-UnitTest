@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.DTOs", "..\Mongo.DTOs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.UnitTests", "..\Mongo.UnitTests\Mongo.UnitTests.csproj", "{BE4B83EE-66AE-43CC-BCC0-F86EB47FE491}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User-Function", "..\User-Function\User-Function.csproj", "{A93FE138-D08B-4538-B9F4-1524921C28DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User-Function", "..\User-Function\User-Function.csproj", "{A93FE138-D08B-4538-B9F4-1524921C28DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

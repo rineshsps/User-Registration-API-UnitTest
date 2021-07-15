@@ -37,6 +37,7 @@ namespace Mongo.API.Controllers
         {
             //try
            // {
+                
                 var userid = User.FindFirst("UserName").Value;
                 var user = _userServices.GetUser(userid);
 
