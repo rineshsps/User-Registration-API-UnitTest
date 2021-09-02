@@ -1,5 +1,6 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using AutoFixture.Community.AutoMapper;
 using AutoFixture.Xunit2;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Mongo.API.Attribute;
 using Mongo.API.Controllers;
+using Mongo.API.Mapping;
 using Mongo.Database.Interfaces;
 using Mongo.Database.Models;
 using Mongo.DTOs;
@@ -30,6 +32,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using Xunit;
+using static Mongo.UnitTests.UsersControllerTest;
 
 namespace Mongo.UnitTests
 {
@@ -40,14 +43,20 @@ namespace Mongo.UnitTests
         {
 
         }
+
         public static IFixture GetDefaultFixture()
         {
-            //var autoMoqCustomization = new AutoMoqCustomization() { ConfigureMembers=true};
-            var autoMoqCustomization = new AutoMoqCustomization();
+            var autoMoqCustomization = new AutoMoqCustomization()
+            {
+                ConfigureMembers = true
+
+            };
+            //var autoMoqCustomization = new AutoMoqCustomization();
 
             return new Fixture().Customize(autoMoqCustomization);
         }
     }
+
 
     public class UsersControllerTest
     {
@@ -109,15 +118,20 @@ namespace Mongo.UnitTests
 
 
         [Theory, GenerateDefaultTestData]
-        public void GetUser_Vaidation_Test(UserCreateDTO user, ClaimsPrincipal claims1, IUsersContext db, IEmailServices email, IUserServices _userServices, ILogger<UsersController> logger, IMapper mapper, IJWTServices jWTService, HttpContext httpContext, IServiceCollection services, IApplicationBuilder app, IWebHostEnvironment env, AuthenticationFilter authentication, AuthorizeAttribute authorize, IPrincipal principal, IClaimsTransformation claimsTransformation)
+        public void GetUser_Vaidation_Test(Fixture fixture, UserCreateDTO user, ClaimsPrincipal claims1, IUsersContext db, IEmailServices email, IUserServices _userServices, ILogger<UsersController> logger,
+          IJWTServices jWTService, HttpContext httpContext,
+          IServiceCollection services, IApplicationBuilder app, IWebHostEnvironment env, AuthenticationFilter authentication, AuthorizeAttribute authorize, IPrincipal principal, IClaimsTransformation claimsTransformation)
         {
+
+            fixture.Customize(new AutoMapperCustomization(x => x.AddMaps(typeof(MappingProfile))));
+            var mapper = fixture.Create<IMapper>();
 
             if (httpContext.User != null /*&& httpContext.User.Identity.IsAuthenticated*/)
             {
                 var claims = new[]
              {
                 new Claim("Id", "123"),
-                new Claim("UserName", "user.UserName.ToString()"),
+                new Claim("UserName", "user1"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
              };
 
